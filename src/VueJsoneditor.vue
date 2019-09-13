@@ -76,13 +76,20 @@ export default {
         this.editor.destroy()
         this.editor = null
       }
+    },
+    async setEditor(value) {
+      this.editor.set(value);
     }
   },
   watch: {
-    value(value) {
-      if (this.editor && value && !this.internalChange) {
-        this.editor.set(value)
-      }
+    value: {
+      immediate: true,
+      async handler(value) {
+        if (this.editor && value && !this.internalChange) {
+          await this.setEditor(value);
+        }
+      },
+      deep: true
     },
     max(value) {
       this.$nextTick(() => {
